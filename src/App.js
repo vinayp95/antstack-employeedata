@@ -19,6 +19,7 @@ class App extends Component {
     <div>
     <Form onSubmit={fields => this.onSubmit(fields)}/>
    <p>{JSON.stringify(this.state.fields, null, 2)}</p>
+   <p>{JSON.stringify(this.EmployeeState, null, 2)}</p>
    </div>
   );
 }

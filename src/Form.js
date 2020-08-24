@@ -4,8 +4,10 @@ export default class Form extends React.Component {
     state = {
         name: "",
         designation: "",
-        skills: "",
-    }
+        skills: [{skills: ""}],
+        contact: [{ type: "", contact: "" }]
+    };
+    EmployeeState = [];
 
     change = (e) => {
         this.setState({
@@ -13,114 +15,132 @@ export default class Form extends React.Component {
         });
     };
 
+    handleChangeContact(i, e) {
+        const { name, value } = e.target;
+        let contact = [...this.state.contact];
+        contact[i] = { ...contact[i], [name]: value };
+        this.setState({ contact });
+    }
+    handleChangeSkills(i, e) {
+        const { name, value } = e.target;
+        let skills = [...this.state.skills];
+        skills[i] = { ...skills[i], [name]: value };
+        this.setState({ skills });
+    }
+
     onSubmit = (e) => {
         this.props.onSubmit(this.state)
         e.preventDefault();
 
-        this.setState({
-            name: "",
-            designation: "",
-            skills: "",
-            contact: "",
-            type: "",
-        });
 
+    }
+
+    addEmp = (e) => {
+        this.EmployeeState.push(this.state)
+        console.log(this.EmployeeState);
+        e.preventDefault();
+        this.setState ({name: "",
+        designation: "",
+        skills: [{skills: ""}],
+        contact: [{ type: "", contact: "" }]});
     }
 
     constructor(props) {
         super(props);
-        this.state = {
-            users: [{ firstName: "", lastName: "" }]
-        };
-
     }
 
-    addClick() {
+    addContact() {
         this.setState(prevState => ({
-            users: [...prevState.users, { type: "", contact: "" }]
+            contact: [...prevState.contact, { type: "", contact: "" }]
         }))
     }
 
     addskills() {
         this.setState(prevState => ({
-            users: [...prevState.users, { skills: ""}]
+            skills: [...prevState.skills, { skills: "" }]
         }))
     }
 
     createUI() {
-        return this.state.users.map((el, i) => (
-            <div key={i}>
+        return this.state.contact.map((el, i) => (
+            <div key={"contact" + i}>
+                <div >
 
-                <input placeholder="Type" name="type" value={el.firstName || ''} onChange={this.handleChange.bind(this, i)} />
-                <input placeholder="Contact" name="contact" value={el.lastName || ''} onChange={this.handleChange.bind(this, i)} />
-                <input type='button' value='add more' onClick={this.addClick.bind(this)} />
+                    <input type="text" placeholder="Type" name="type" value={el.type || ''} onChange={this.handleChangeContact.bind(this, i)} />
+                    <input type="text" placeholder="Contact" name="contact" value={el.contact || ''} onChange={this.handleChangeContact.bind(this, i)} />
+
+                </div>
+                <input type='button' value='add more' onClick={this.addContact.bind(this)} />
             </div>
         ))
     }
     skills() {
-        return this.state.users.map((l, j) => (
-            <div key={j}>
+        return this.state.skills.map((l, j) => (
+            <div key={"skills" + j}>
+                <div >
 
-                <input placeholder="Skills" name="skills" value={l.firstName || ''} onChange={this.handleChange.bind(this, j)} />
-                <input type='button' value='add' onClick={this.addskills.bind(this)} />
+                    <input type="text" placeholder="Skills" name="skills" value={l.skills || ''}
+                        onChange={this.handleChangeSkills.bind(this, j)}
+                    />
+
                 </div>
+                <input type='button' value='add' onClick={this.addskills.bind(this)} />
+            </div>
         ))
     }
 
-    handleChange(i, e) {
-        const { name, value } = e.target;
-        let users = [...this.state.users];
-        users[i] = { ...users[i], [name]: value };
-        this.setState({ users });
-    }
+
 
     render() {
         return (
             <div>
-                <h3 style={{textAlign:"center"}}>Employee Data</h3>
-            <form style={{ marginTop: "3%", marginLeft: "2%" }}>
-                <div>
-                    <div style={{ width: "200px", float: "left" }}>
-                        <label>Name</label>
+                <h3 style={{ textAlign: "center" }}>Employee Data</h3>
+                <form style={{ marginTop: "3%", marginLeft: "2%" }}>
+                    <div>
+                        <div style={{ width: "200px", float: "left" }}>
+                            <label>Name</label>
+                        </div>
+                        <input
+                            name="name"
+                            placeholder="Name" value={this.state.name}
+                            onChange={e => this.change(e)}
+                        />
                     </div>
-                    <input
-                        name="name"
-                        placeholder="Name" value={this.state.name}
-                        onChange={e => this.change(e)}
-                    />
-                </div>
-                <br/>
-                <div>
-                    <div style={{ width: "200px", float: "left" }}>
-                        <label>Designation</label>
+                    <br />
+                    <div>
+                        <div style={{ width: "200px", float: "left" }}>
+                            <label>Designation</label>
+                        </div>
+                        <input
+                            name="designation"
+                            placeholder="Designation" value={this.state.designation}
+                            onChange={e => this.change(e)}
+                        />
                     </div>
-                    <input
-                        name="designation"
-                        placeholder="Designation" value={this.state.designation}
-                        onChange={e => this.change(e)}
-                    />
-                </div>
-                <br/>
-                <div>
-                    <div style={{ width: "200px", float: "left" }}>
-                        <label>Conact Details</label>
+                    <br />
+                    <div>
+                        <div style={{ width: "200px", float: "left" }}>
+                            <label>Conact Details</label>
+                        </div>
+                        {this.createUI()}
+                        
                     </div>
-                    {this.createUI()}
-                    {/* <input type='button' value='add more' onClick={this.addClick.bind(this)} /> */}
-                </div>
-                <br/>
-                <div>
-                <div style={{ width: "200px", float: "left" }}>
-                        <label>Skills</label>
+                    <br />
+                    <div>
+                        <div style={{ width: "200px", float: "left" }}>
+                            <label>Skills</label>
+                        </div>
+                        {this.skills()}
+                        
                     </div>
-                    {this.skills()}
-                    {/* <input type='button' value='add' onClick={this.addskills.bind(this)} /> */}
-                </div>
-                <br/>
-                <div>
-                    <button onClick={e => this.onSubmit(e)}>Show Data</button>
-                </div>
-            </form>
+                    <br />
+                    <div>
+                        <button onClick={e => this.onSubmit(e)}>Show Data</button>
+                    </div>
+                    <div>
+                        <button onClick={e => this.addEmp(e)}>Save Employee</button>
+                    </div>
+                </form>
             </div>
         )
     }
