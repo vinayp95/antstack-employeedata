@@ -5,7 +5,8 @@ export default class Form extends React.Component {
         name: "",
         designation: "",
         skills: [{ skills: "" }],
-        contact: [{ type: "", contact: "" }]
+        contact: [{ type: "", contact: "" }],
+        DOB: ""
     };
     EmployeeState = [];
 
@@ -37,7 +38,8 @@ export default class Form extends React.Component {
             name: "",
             designation: "",
             skills: [{ skills: "" }],
-            contact: [{ type: "", contact: "" }]
+            contact: [{ type: "", contact: "" }],
+            DOB: "",
         });
     }
 
@@ -114,7 +116,7 @@ export default class Form extends React.Component {
                 {this.EmployeeState.map((empData, i) => (
                     <div>
                         <p>Employee #{i + 1}</p>
-                        <table>
+                        <table width="100%">
                             <tbody>
                                 <tr>
                                     <td>Name</td>
@@ -123,6 +125,17 @@ export default class Form extends React.Component {
                                 <tr>
                                     <td>Designation</td>
                                     <td>{empData.designation}</td>
+                                </tr>
+                                <tr>
+                                    <td>Contact</td>
+                                    <td>
+                                        {empData.contact.map((cont) => (
+                                            <div>
+                                                {cont.type} - {cont.contact}
+                                                <br />
+                                            </div>
+                                        ))}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Skills</td>
@@ -136,22 +149,18 @@ export default class Form extends React.Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Contact</td>
-                                    <td>
-                                        {empData.contact.map((cont) => (
-                                            <div>
-                                                {cont.type} - {cont.contact}
-                                                <br />
-                                            </div>
-                                        ))}
-                                    </td>
+                                    <td>Date of Birth</td>
+                                    <td>{empData.DOB}</td>
                                 </tr>
+                                
                             </tbody>
                         </table>
                         <hr />
                     </div>
                 ))}
-                <button onClick={e => this.DownloadJSON(e)}>Download Data</button>
+                <div style={{textAlign:"center"}}>
+                <button style={{padding:"1%"}} onClick={e => this.DownloadJSON(e)}>Download Data</button>
+                </div>
             </div>
 
         )
@@ -203,6 +212,15 @@ export default class Form extends React.Component {
                                     </td>
                                     <td>
                                         <input type='button' value='add' onClick={this.addskills.bind(this)} />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Date of Birth</td>
+                                    <td>
+                                        {/* <input type="date" id="start" name="trip-start"
+       value="2018-07-22"
+       min="1901-01-01" max="2020-12-31"/> */}
+                                        <input name="DOB" value={this.state.DOB} type="date" onChange={e => this.change(e)} />
                                     </td>
                                 </tr>
                             </tbody>
